@@ -3,9 +3,9 @@ import {Todo} from './todo.model';
 import {FormControl, Validators} from '@angular/forms';
 import {select, Store} from '@ngrx/store';
 import {deleteTodo, saveOrUpdateTodo} from './store/todo.actions';
-import {selectTodoState} from './store/todo.selector';
+import {selectTodos} from './store/todo.selector';
 import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {filter, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-todo',
@@ -25,9 +25,12 @@ export class TodoComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.store.pipe(
-      select(selectTodoState),
+      select(selectTodos),
+      filter(state => state && state.length > 0),
       takeUntil(this.unsubscribe)
-    ).subscribe(todos => this.todos = todos);
+    ).subscribe(todos => {
+      this.todos = todos;
+    });
   }
 
   undoOrCompleteTodo(item: Todo) {
