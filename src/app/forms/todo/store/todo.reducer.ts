@@ -17,6 +17,8 @@ export const todoInitialState: TodoState = {
   ]
 };
 
+export const todoFeatureKey = 'todoState';
+
 export const todoReducer = createReducer(
   todoInitialState,
   on(TodoActions.saveOrUpdateTodo, (state, payload) => {
@@ -29,8 +31,9 @@ export const todoReducer = createReducer(
     const todo = state.todos.find(todo => todo.id === payload.todoId);
     if (todo) {
       const stateCopy = _.cloneDeep(state);
-      const index = stateCopy.todos.indexOf(todo);
-      return {...state, todos: stateCopy.todos.splice(index, 1)}
+      const index = stateCopy.todos.findIndex(todo => todo.id === payload.todoId);
+      stateCopy.todos.splice(index, 1)
+      return {...state, todos: stateCopy.todos}
     }
     return state;
   })

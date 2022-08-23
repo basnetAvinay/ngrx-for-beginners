@@ -5,25 +5,17 @@ import {AppRoutingModule} from './app-routing/app-routing.module';
 import {AppComponent} from './app.component';
 import {StoreModule} from '@ngrx/store';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {TodoModule} from './forms/todo/todo.module';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import {environment} from '../environments/environment';
-import {todoReducer} from './forms/todo/store/todo.reducer';
+import {VoidComponent} from './components/void/void.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, VoidComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    StoreModule.forRoot({todoState: todoReducer}),
-    // Instrumentation must be imported after importing StoreModule (config is optional)
-    StoreDevtoolsModule.instrument({
-      maxAge: 25, // Retains last 25 states
-      logOnly: environment.production, // Restrict extension to log-only mode
-      autoPause: true, // Pauses recording actions and state changes when the extension window is not open
-    }),
     BrowserAnimationsModule,
-    TodoModule,
+    StoreModule.forRoot({}),
     StoreDevtoolsModule.instrument({maxAge: 25, logOnly: environment.production})
   ],
   providers: [],
