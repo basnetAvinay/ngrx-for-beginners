@@ -1,44 +1,42 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Todo} from './todo.model';
 import {FormControl, Validators} from '@angular/forms';
+import {select, Store} from '@ngrx/store';
+import {deleteTodo, saveOrUpdateTodo} from './store/todo.actions';
+import {selectTodoState} from './store/todo.selector';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-todo',
   templateUrl: './todo.component.html',
   styleUrls: ['./todo.component.scss']
 })
-export class TodoComponent implements OnInit {
+export class TodoComponent implements OnInit, OnDestroy {
 
   todos: Todo[] = [];
   todoDescriptionFormControl = new FormControl('', [Validators.required]);
   todoIdFormControl = new FormControl(null, [Validators.required]);
 
-  constructor() {
+  private unsubscribe = new Subject<void>();
+
+  constructor(private readonly store: Store) {
   }
 
   ngOnInit(): void {
-    this.todos = [
-      {id: 1, description: 'Buy milk', done: true},
-      {id: 2, description: 'Learn RxJS', done: false},
-      {id: 3, description: 'Learn Angular', done: true},
-      {id: 4, description: 'Learn NgRx', done: false},
-      {id: 5, description: 'Learn Angular animation', done: true},
-    ];
+    this.store.pipe(
+      select(selectTodoState),
+      takeUntil(this.unsubscribe)
+    ).subscribe(todos => this.todos = todos);
   }
 
-  undoTodo(id: number) {
-    this.todos = this.todos.map(todo => todo.id === id ? {...todo, done: false} : todo);
+  undoOrCompleteTodo(item: Todo) {
+    const todo: Todo = {...item, done: !item.done};
+    this.store.dispatch(saveOrUpdateTodo({todo, isUpdate: true}));
   }
 
-  completeTodo(id: number) {
-    this.todos = this.todos.map(todo => todo.id === id ? {...todo, done: true} : todo);
-  }
-
-  deleteTodo(id: number) {
-    const todo = this.todos.find(todo => todo.id === id);
-    if (todo) {
-      this.todos.splice(this.todos.indexOf(todo), 1);
-    }
+  deleteTodo(todoId: number) {
+    this.store.dispatch(deleteTodo({todoId}))
   }
 
   addTodo(): void {
@@ -48,7 +46,12 @@ export class TodoComponent implements OnInit {
         description: this.todoDescriptionFormControl.value ?? '',
         done: false
       }
-      this.todos.push(todo);
+      this.store.dispatch(saveOrUpdateTodo({todo, isUpdate: false}));
     }
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 }
