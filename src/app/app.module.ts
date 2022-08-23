@@ -8,6 +8,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import {environment} from '../environments/environment';
 import {VoidComponent} from './components/void/void.component';
+import {HeaderModule} from './components/header/header.module';
 
 @NgModule({
   declarations: [AppComponent, VoidComponent],
@@ -16,7 +17,8 @@ import {VoidComponent} from './components/void/void.component';
     AppRoutingModule,
     BrowserAnimationsModule,
     StoreModule.forRoot({}),
-    StoreDevtoolsModule.instrument({maxAge: 25, logOnly: environment.production})
+    StoreDevtoolsModule.instrument({maxAge: 25, logOnly: environment.production}),
+    HeaderModule
   ],
   providers: [],
   bootstrap: [AppComponent]
