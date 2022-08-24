@@ -1,6 +1,7 @@
 This repo is the codebase for NgRx workshop.
 
 Part 1: [NgRx Basics](https://blog.avinaybasnet.com.np/posts/ngrx/#0)
+
 Part 2: NgRx Advanced (Coming soon!)
 
 ## Setup
