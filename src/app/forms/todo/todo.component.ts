@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Todo} from './todo.model';
 import {FormControl, Validators} from '@angular/forms';
 import {select, Store} from '@ngrx/store';
-import {deleteTodo, saveOrUpdateTodo} from './store/todo.actions';
+import {deleteTodo, fetchTodos, saveOrUpdateTodo} from './store/todo.actions';
 import {selectTodos} from './store/todo.selector';
 import {Subject} from 'rxjs';
 import {filter, takeUntil} from 'rxjs/operators';
@@ -24,6 +24,7 @@ export class TodoComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.store.dispatch(fetchTodos());
     this.store.pipe(
       select(selectTodos),
       filter(state => state && state.length > 0),

@@ -8,6 +8,9 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {StoreModule} from '@ngrx/store';
 import {todoFeatureKey, todoReducer} from './store/todo.reducer';
 import {RouterModule, Routes} from '@angular/router';
+import {HttpClientModule} from '@angular/common/http';
+import {EffectsModule} from '@ngrx/effects';
+import {TodoEffects} from './store/todo.effects';
 
 const routes: Routes = [
   {path: '', component: TodoComponent}
@@ -21,7 +24,9 @@ const routes: Routes = [
     MatButtonModule,
     MatInputModule,
     ReactiveFormsModule,
+    HttpClientModule,
     RouterModule.forChild(routes),
+    EffectsModule.forFeature([TodoEffects]),
     StoreModule.forFeature(todoFeatureKey, todoReducer)
   ],
   exports: [

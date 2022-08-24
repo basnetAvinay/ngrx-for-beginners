@@ -8,19 +8,17 @@ export interface TodoState {
 }
 
 export const todoInitialState: TodoState = {
-  todos: [
-    {id: 1, description: 'Buy milk', done: true},
-    {id: 2, description: 'Learn RxJS', done: false},
-    {id: 3, description: 'Learn Angular', done: true},
-    {id: 4, description: 'Learn NgRx', done: false},
-    {id: 5, description: 'Learn Angular animation', done: true},
-  ]
+  todos: []
 };
 
 export const todoFeatureKey = 'todoState';
 
 export const todoReducer = createReducer(
   todoInitialState,
+  on(TodoActions.setTodos, (state, payload) => {
+    const todos = payload.todos;
+    return {...state, todos};
+  }),
   on(TodoActions.saveOrUpdateTodo, (state, payload) => {
     const todos = payload.isUpdate
       ? state.todos.map(todo => todo.id === payload.todo.id ? {...todo, done: !todo.done} : todo)
