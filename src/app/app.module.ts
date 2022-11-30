@@ -10,6 +10,7 @@ import {environment} from '../environments/environment';
 import {VoidComponent} from './components/void/void.component';
 import {HeaderModule} from './components/header/header.module';
 import {EffectsModule} from '@ngrx/effects';
+import {reducers} from './app-store/app.reducer';
 
 @NgModule({
   declarations: [AppComponent, VoidComponent],
@@ -17,7 +18,7 @@ import {EffectsModule} from '@ngrx/effects';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    StoreModule.forRoot({}),
+    StoreModule.forRoot(reducers),
     EffectsModule.forRoot(),
     StoreDevtoolsModule.instrument({maxAge: 25, logOnly: environment.production}),
     HeaderModule
